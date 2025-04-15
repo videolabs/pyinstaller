@@ -135,17 +135,6 @@ _win_includes = {
     # Cpp REST SDK
     r'casablanca120\.dll',
 
-    # Universal C Runtime Library (since Visual Studio 2015)
-    #
-    # NOTE: these should be put under a switch, as they need not to be bundled if deployment target is Windows 10
-    # and later, as "UCRT is now a system component in Windows 10 and later, managed by Windows Update".
-    # (https://docs.microsoft.com/en-us/cpp/windows/determining-which-dlls-to-redistribute?view=msvc-170)
-    # And as discovered in #6326, Windows prefers system-installed version over the bundled one, anyway
-    # (see https://docs.microsoft.com/en-us/cpp/windows/universal-crt-deployment?view=msvc-170#local-deployment).
-    r'api-ms-win-core.*',
-    r'api-ms-win-crt.*',
-    r'ucrtbase\.dll',
-
     # Visual Studio 2015/2017/2019/2022 (VC14) runtime
     # https://docs.microsoft.com/en-us/visualstudio/releases/2022/redistribution
     #
@@ -168,6 +157,19 @@ _win_includes = {
 
     # Allow pythonNN.dll, pythoncomNN.dll, pywintypesNN.dll
     r'py(?:thon(?:com(?:loader)?)?|wintypes)\d+\.dll',
+}
+
+_win_ucrt = {
+    # Universal C Runtime Library (since Visual Studio 2015)
+    #
+    # NOTE: these should be put under a switch, as they need not to be bundled if deployment target is Windows 10
+    # and later, as "UCRT is now a system component in Windows 10 and later, managed by Windows Update".
+    # (https://docs.microsoft.com/en-us/cpp/windows/determining-which-dlls-to-redistribute?view=msvc-170)
+    # And as discovered in #6326, Windows prefers system-installed version over the bundled one, anyway
+    # (see https://docs.microsoft.com/en-us/cpp/windows/universal-crt-deployment?view=msvc-170#local-deployment).
+    r'api-ms-win-core.*',
+    r'api-ms-win-crt.*',
+    r'ucrtbase\.dll',
 }
 
 _win_excludes = {
@@ -244,6 +246,7 @@ _cygwin_excludes = {
 if compat.is_win:
     _includes |= _win_includes
     _excludes |= _win_excludes
+    _excludes |= _win_ucrt
 elif compat.is_cygwin:
     _excludes |= _cygwin_excludes
 elif compat.is_aix:
